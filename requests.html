@@ -8,34 +8,16 @@
     <link rel="stylesheet" href="css/styles.css">
     <style>
         .card-actions { margin-top: 15px; }
-
         .delete-btn, .complete-btn {
-            cursor: pointer;
-            padding: 6px 12px;
-            margin-right: 8px;
-            border: none;
-            border-radius: 5px;
-            color: #fff;
-            font-weight: 500;
-            transition: 0.3s;
+            cursor: pointer; padding: 6px 12px; margin-right: 8px;
+            border: none; border-radius: 5px; color: #fff; font-weight: 500; transition: 0.3s;
         }
-
         .complete-btn { background-color: #28a745; }
         .delete-btn { background-color: #dc3545; display: none; }
-
         #login-form { margin-bottom: 20px; }
         #login-form input { padding: 6px; margin-right: 8px; }
         #login-form button { padding: 6px 12px; }
-
-        #notification {
-            margin-bottom: 15px;
-            padding: 10px 15px;
-            border-radius: 5px;
-            background-color: #28a745;
-            color: white;
-            font-weight: 500;
-            display: none;
-        }
+        #notification { margin-bottom: 15px; padding: 10px 15px; border-radius: 5px; background-color: #28a745; color: white; font-weight: 500; display: none; }
     </style>
 </head>
 <body>
@@ -49,6 +31,7 @@
                 <li><a href="technicians.html">Technicians</a></li>
                 <li><a href="request.html">Request Service</a></li>
                 <li><a href="requests.html">View Requests</a></li>
+                <li><a href="about.html">About</a></li>
             </ul>
         </nav>
     </div>
@@ -57,21 +40,16 @@
 <main>
     <section class="page-section">
         <div class="container">
-            <h1 class="section-title">Admin - Service Requests</h1>
-
-            <!-- Notification -->
+            <h1 class="section-title">All Service Requests</h1>
             <div id="notification"></div>
 
-            <!-- Login Form -->
             <form id="login-form">
-                <input type="text" id="username" placeholder="Username" required>
-                <input type="password" id="password" placeholder="Password" required>
+                <input type="text" id="username" placeholder="Username">
+                <input type="password" id="password" placeholder="Password">
                 <button type="submit">Login</button>
             </form>
 
-            <!-- Requests Container (Hidden Initially) -->
-            <div id="requests-container" class="services-grid" style="display: none;"></div>
-
+            <div id="requests-container" class="services-grid"></div>
         </div>
     </section>
 </main>
@@ -83,7 +61,6 @@
 </footer>
 
 <script src="js/script.js"></script>
-
 <script>
     const requestsContainer = document.getElementById('requests-container');
     const loginForm = document.getElementById('login-form');
@@ -91,7 +68,6 @@
     const passwordInput = document.getElementById('password');
     const notification = document.getElementById('notification');
 
-    // Show submission notification
     const newNotification = JSON.parse(localStorage.getItem('newRequestNotification'));
     if (newNotification) {
         notification.textContent = newNotification.message;
@@ -100,26 +76,23 @@
         localStorage.removeItem('newRequestNotification');
     }
 
-    // LOGIN SYSTEM
+    let adminMode = false;
+
     loginForm.addEventListener('submit', (e) => {
         e.preventDefault();
-
         if (usernameInput.value === "admin" && passwordInput.value === "admin123") {
-
-            // Show requests only after login
-            requestsContainer.style.display = "grid";
-
+            adminMode = true;
             renderRequests(requestsContainer, true);
-            autoRefreshRequests(requestsContainer, true, 10000);
-
             alert("Admin mode activated!");
             loginForm.style.display = 'none';
-
         } else {
             alert("Wrong username or password");
         }
     });
 
+    // Requests are hidden until admin logs in
+    renderRequests(requestsContainer, false);
+    autoRefreshRequests(requestsContainer, 10000);
 </script>
 
 </body>
