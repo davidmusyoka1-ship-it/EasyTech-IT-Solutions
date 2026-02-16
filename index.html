@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EasyTech IT Solutions - Home</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<header class="navbar">
+    <div class="container nav-container">
+        <h1 class="logo">EasyTech</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="technicians.html">Technicians</a></li>
+                <li><a href="request.html">Request Service</a></li>
+                <li><a href="requests.html">View Requests</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<main>
+    <!-- Hero Section -->
+    <section class="hero page-section">
+        <div class="container hero-content">
+            <div class="hero-text">
+                <h1>EasyTech IT Solutions</h1>
+                <p>Your one-stop solution for all IT services: network setup, Windows installation, CCTV, antivirus, web portals, and more.</p>
+                <a href="request.html" class="btn-primary">Request a Service</a>
+            </div>
+            <div class="hero-image">
+                <img src="https://i.pinimg.com/736x/de/9c/2e/de9c2e51b4e742677b9fc4ec7c35c50f.jpg" alt="IT Solutions">
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="services-section page-section">
+        <div class="container">
+            <h2 class="section-title">Our Services</h2>
+            <div id="services-container" class="services-grid"></div>
+        </div>
+    </section>
+</main>
+
+<footer>
+    <div class="container">
+        <p>&copy; 2026 EasyTech IT Solutions. All rights reserved.</p>
+    </div>
+</footer>
+
+<script src="js/script.js"></script>
+<script>
+    const servicesContainer = document.getElementById('services-container');
+    renderServices(servicesContainer);
+</script>
+
+</body>
+</html>

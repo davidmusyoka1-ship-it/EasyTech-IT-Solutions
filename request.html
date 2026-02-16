@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EasyTech IT Solutions - Request Service</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<header class="navbar">
+    <div class="container nav-container">
+        <h2 class="logo">EasyTech</h2>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="technicians.html">Technicians</a></li>
+                <li><a href="request.html">Request Service</a></li>
+                <li><a href="requests.html">View Requests</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<section class="page-section">
+    <div class="container">
+        <h1 class="section-title">Request a Service</h1>
+        <form id="request-form">
+            <label for="name">Full Name:</label>
+            <input type="text" id="name" required>
+
+            <label for="phone">Phone Number:</label>
+            <input type="text" id="phone" required>
+
+            <label for="location">Location:</label>
+            <input type="text" id="location" required>
+
+            <label for="service">Select Service:</label>
+            <select id="service" required></select>
+
+            <button type="submit" class="btn-primary">Submit Request</button>
+        </form>
+        <p id="form-msg" style="margin-top:10px;"></p>
+    </div>
+</section>
+
+<footer>
+    <div class="container">
+        <p>&copy; 2026 EasyTech IT Solutions. All rights reserved.</p>
+    </div>
+</footer>
+
+<script src="js/script.js"></script>
+<script>
+    const serviceSelect = document.getElementById('service');
+    populateServiceDropdown(serviceSelect);
+
+    const form = document.getElementById('request-form');
+    const formMsg = document.getElementById('form-msg');
+
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        const name = document.getElementById('name').value.trim();
+        const phone = document.getElementById('phone').value.trim();
+        const location = document.getElementById('location').value.trim();
+        const serviceId = parseInt(document.getElementById('service').value);
+
+        if (!name || !phone || !location || !serviceId) {
+            formMsg.style.color = "red";
+            formMsg.textContent = "Please fill in all fields correctly.";
+            return;
+        }
+
+        const service = services.find(s => s.id === serviceId);
+        const tech = getTechnicianById(service.technicianId);
+
+        const newRequest = {
+            id: Date.now(),
+            name,
+            phone,
+            location,
+            service: service.name,
+            price: service.price,
+            technician: tech.name,
+            completed: false
+        };
+
+        requests.push(newRequest);
+        saveRequests();
+
+        localStorage.setItem('newRequestNotification', JSON.stringify({
+            message: `Request for "${service.name}" submitted successfully!`,
+            timestamp: Date.now()
+        }));
+
+        formMsg.style.color = "green";
+        formMsg.textContent = `Request for "${service.name}" submitted successfully!`;
+        form.reset();
+    });
+</script>
+
+</body>
+</html>
