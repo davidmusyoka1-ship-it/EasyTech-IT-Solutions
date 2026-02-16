@@ -9,10 +9,12 @@
 </head>
 <body>
 
+<!-- HEADER: Site logo and navigation menu -->
 <header class="navbar">
     <div class="container nav-container">
-        <h1 class="logo">EasyTech</h1>
+        <h2 class="logo">EasyTech</h2>
         <nav>
+            <!-- Navigation links to all pages -->
             <ul>
                 <li><a href="index.html">Home</a></li>
                 <li><a href="technicians.html">Technicians</a></li>
@@ -23,30 +25,29 @@
     </div>
 </header>
 
+<!-- MAIN CONTENT: Hero Section -->
 <main>
-    <!-- Hero Section -->
-    <section class="hero page-section">
+    <section class="hero">
         <div class="container hero-content">
             <div class="hero-text">
-                <h1>EasyTech IT Solutions</h1>
-                <p>Your one-stop solution for all IT services: network setup, Windows installation, CCTV, antivirus, web portals, and more.</p>
-                <a href="request.html" class="btn-primary">Request a Service</a>
+                <h1>Welcome to EasyTech IT Solutions</h1>
+                <p>Your one-stop platform for IT services: network setup, software installation, CCTV, portals, machine servicing, and more.</p>
             </div>
             <div class="hero-image">
-                <img src="https://i.pinimg.com/736x/de/9c/2e/de9c2e51b4e742677b9fc4ec7c35c50f.jpg" alt="IT Solutions">
+                <!-- Hero image from Pinterest -->
+                <img src="https://i.pinimg.com/736x/de/9c/2e/de9c2e51b4e742677b9fc4ec7c35c50f.jpg" alt="EasyTech IT Solutions Hero Image">
             </div>
         </div>
     </section>
 
-    <!-- Services Section -->
-    <section class="services-section page-section">
-        <div class="container">
-            <h2 class="section-title">Our Services</h2>
-            <div id="services-container" class="services-grid"></div>
-        </div>
+    <!-- SERVICES SECTION: Dynamic cards for services -->
+    <section class="services-section">
+        <h2 class="section-title">Our Services</h2>
+        <div id="services-container" class="services-grid"></div>
     </section>
 </main>
 
+<!-- FOOTER -->
 <footer>
     <div class="container">
         <p>&copy; 2026 EasyTech IT Solutions. All rights reserved.</p>
@@ -55,6 +56,7 @@
 
 <script src="js/script.js"></script>
 <script>
+    // Populate the homepage with dynamic services
     const servicesContainer = document.getElementById('services-container');
     renderServices(servicesContainer);
 </script>
