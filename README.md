@@ -18,7 +18,8 @@ The project solves the problem of managing and accessing IT services efficiently
    - Services are listed with assigned technicians dynamically using JavaScript.
 
 2. **Technician Profiles**  
-   - Displays technician details, specialties, experience, and assigned services dynamically.
+   - Displays technician details, specialties, experience, and assigned services dynamically
+   - Also to Access requests made these are the logins,admin username:admin, password:admin123.
 
 3. **Service Request Form**  
    - Users can request services via a form.  
