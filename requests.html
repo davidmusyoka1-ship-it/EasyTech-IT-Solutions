@@ -7,6 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/styles.css">
     <style>
+        /* Minimal extra styles for admin buttons */
         .card-actions { margin-top: 15px; }
         .delete-btn, .complete-btn {
             cursor: pointer; padding: 6px 12px; margin-right: 8px;
@@ -31,7 +32,6 @@
                 <li><a href="technicians.html">Technicians</a></li>
                 <li><a href="request.html">Request Service</a></li>
                 <li><a href="requests.html">View Requests</a></li>
-                <li><a href="about.html">About</a></li>
             </ul>
         </nav>
     </div>
@@ -41,15 +41,21 @@
     <section class="page-section">
         <div class="container">
             <h1 class="section-title">All Service Requests</h1>
+
+            <!-- Notification for newly submitted requests -->
             <div id="notification"></div>
 
+            <!-- Admin login to allow viewing and deleting requests -->
             <form id="login-form">
                 <input type="text" id="username" placeholder="Username">
                 <input type="password" id="password" placeholder="Password">
                 <button type="submit">Login</button>
             </form>
 
-            <div id="requests-container" class="services-grid"></div>
+            <!-- Dynamic cards for requests -->
+            <div id="requests-container" class="services-grid">
+                <p>Please log in to view submitted requests.</p>
+            </div>
         </div>
     </section>
 </main>
@@ -68,6 +74,9 @@
     const passwordInput = document.getElementById('password');
     const notification = document.getElementById('notification');
 
+    let adminMode = false;
+
+    // Show new request notification if any
     const newNotification = JSON.parse(localStorage.getItem('newRequestNotification'));
     if (newNotification) {
         notification.textContent = newNotification.message;
@@ -76,23 +85,84 @@
         localStorage.removeItem('newRequestNotification');
     }
 
-    let adminMode = false;
+    // Initial message before admin logs in
+    requestsContainer.innerHTML = "<p>Please log in to view submitted requests.</p>";
 
+    // Handle admin login
     loginForm.addEventListener('submit', (e) => {
         e.preventDefault();
         if (usernameInput.value === "admin" && passwordInput.value === "admin123") {
             adminMode = true;
-            renderRequests(requestsContainer, true);
-            alert("Admin mode activated!");
+            renderRequests(requestsContainer, true); // render requests only after login
             loginForm.style.display = 'none';
+            alert("Admin mode activated!");
+            autoRefreshRequests(requestsContainer, true); // start auto-refresh after login
         } else {
             alert("Wrong username or password");
         }
     });
 
-    // Requests are hidden until admin logs in
-    renderRequests(requestsContainer, false);
-    autoRefreshRequests(requestsContainer, 10000);
+    // ---------------- Render Requests Function ----------------
+    function renderRequests(container, loggedIn = false) {
+        container.innerHTML = '';
+        if (!loggedIn) {
+            container.innerHTML = "<p>Please log in to view submitted requests.</p>";
+            return;
+        }
+
+        if (requests.length === 0) {
+            container.innerHTML = "<p>No requests yet. Once someone asks for help, you'll see it here.</p>";
+            return;
+        }
+
+        requests.forEach(req => {
+            const contentHtml = `
+                <p><strong>Customer:</strong> ${req.name}</p>
+                <p><strong>Phone:</strong> ${req.phone}</p>
+                <p><strong>Location:</strong> ${req.location}</p>
+                <p><strong>Price:</strong> KSH ${req.price.toLocaleString()}</p>
+                <p><strong>Technician:</strong> ${req.technician}</p>
+                <div class="card-actions">
+                    <button class="complete-btn">✅ Complete</button>
+                    <button class="delete-btn">🗑 Delete</button>
+                </div>
+            `;
+            const card = createCard(req.service, contentHtml);
+            if (req.completed) card.style.opacity = 0.5;
+            container.appendChild(card);
+
+            const completeBtn = card.querySelector('.complete-btn');
+            const deleteBtn = card.querySelector('.delete-btn');
+
+            completeBtn.addEventListener('click', () => {
+                req.completed = true;
+                saveRequests();
+                card.style.opacity = 0.5;
+                setTimeout(() => {
+                    requests = requests.filter(r => r.id !== req.id);
+                    saveRequests();
+                    renderRequests(container, loggedIn);
+                }, 500);
+            });
+
+            deleteBtn.addEventListener('click', () => {
+                if (!loggedIn) return;
+                if (confirm(`Delete request from ${req.name}?`)) {
+                    requests = requests.filter(r => r.id !== req.id);
+                    saveRequests();
+                    renderRequests(container, loggedIn);
+                }
+            });
+
+            if (loggedIn) deleteBtn.style.display = 'inline-block';
+        });
+    }
+
+    // ---------------- Auto Refresh ----------------
+    function autoRefreshRequests(container, loggedIn = false, interval = 10000) {
+        if (!loggedIn) return;
+        setInterval(() => renderRequests(container, loggedIn), interval);
+    }
 </script>
 
 </body>
